@@ -5,8 +5,6 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
-const Employee = require("./lib/Employee");
-
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
@@ -15,35 +13,108 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
-const employeeData = [
-    {
-        type: "prompt",
-        name: "name",
-        message: "Please enter the team member name."
-    },
-    // {
-    //     type: "prompt",
-    //     name: "id",
-    //     message: "Please enter the team member ID."
-    // },
-    // {
-    //     type: "prompt",
-    //     name: "email",
-    //     message: "Please enter the team member email."
-    // },
-    // {
-    //     type: "list",
-    //     name: "member",
-    //     message: "Please select the type of team member.",
-    //     choices: [
-    //         "Manager",
-    //         "Engineer",
-    //         "Intern"
-    //     ]
-    // },
-];
+inquirer.prompt(
+    [{
+        type: "confirm",
+        name: "teambuild",
+        message: "Would you like to create a new team?",
+    }]
+).then((answer) => {
 
-employeeData.getName()
+    if (answer.teambuild !== false) {
+        buildTeam()
+    }
+    else {
+        console.log("no")
+    };
+
+});
+
+function buildTeam() {
+
+    function createManager() {
+        // console.log("manager");
+        inquirer.prompt([
+            {
+                type: "prompt",
+                name: "managername",
+                message: "Please enter the Manager's name.",
+                validate: answer => {
+                    if (answer === "") {
+                        return "Please enter a name.";
+                    }
+                    return true;
+                }
+
+
+            },
+            {
+                type: "prompt",
+                name: "managernameid",
+                message: "Please enter the Manager's numeric ID.",
+                validate: answer => {
+                    //regex number validation
+
+                    if (answer.match(/^[1-9]\d*$/)) {
+                        return true;
+                    }
+                    else {
+                        return "Entry must be a numeric entry."
+                    }
+                }
+            },
+            {
+                type: "prompt",
+                name: "managernameemail",
+                message: "Please enter the Manager's email.",
+                validate: answer => {
+                    if (answer === "") {
+                        return "Please enter an email.";
+                    }
+                    return true;
+                }
+            },
+        ])
+            .then((answers) => console.log(answers));
+    };
+    createManager();
+
+
+
+}
+
+function renderTeam() {
+
+}
+
+// const employeeData = [
+//     {
+//         type: "prompt",
+//         name: "name",
+//         message: "Please enter the team member name."
+//     },
+//     {
+//         type: "prompt",
+//         name: "id",
+//         message: "Please enter the team member ID."
+//     },
+//     {
+//         type: "prompt",
+//         name: "email",
+//         message: "Please enter the team member email."
+//     },
+//     {
+//         type: "list",
+//         name: "member",
+//         message: "Please select the type of team member.",
+//         choices: [
+//             "Engineer",
+//             "Intern",
+//             "No more team members needed",
+//         ]
+//     },
+// ];
+
 
 // module.exports = employeeData
 
@@ -51,11 +122,11 @@ employeeData.getName()
 //     .then((employeeData) => {
 
 //         let newData = employeeData;
-        
+
 //         console.log(newData);
 
 
-        
+
 
 //         // console.log(type.member);
 //         // let memberStats

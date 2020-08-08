@@ -13,6 +13,8 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
+const theTeam = [];
+
 inquirer.prompt(
     [{
         type: "confirm",
@@ -24,20 +26,17 @@ inquirer.prompt(
     if (answer.teambuild !== false) {
         buildTeam()
     }
-    else {
-        console.log("no")
-    };
+    else console.log("No Team Creation")
 
 });
 
 function buildTeam() {
 
     function createManager() {
-        // console.log("manager");
         inquirer.prompt([
             {
                 type: "prompt",
-                name: "managername",
+                name: "managerName",
                 message: "Please enter the Manager's name.",
                 validate: answer => {
                     if (answer === "") {
@@ -45,27 +44,22 @@ function buildTeam() {
                     }
                     return true;
                 }
-
-
             },
             {
                 type: "prompt",
-                name: "managernameid",
+                name: "managerId",
                 message: "Please enter the Manager's numeric ID.",
                 validate: answer => {
                     //regex number validation
-
                     if (answer.match(/^[1-9]\d*$/)) {
                         return true;
                     }
-                    else {
-                        return "Entry must be a numeric entry."
-                    }
+                    return "Entry must be a numeric entry."
                 }
             },
             {
                 type: "prompt",
-                name: "managernameemail",
+                name: "managerEmail",
                 message: "Please enter the Manager's email.",
                 validate: answer => {
                     if (answer === "") {
@@ -74,82 +68,110 @@ function buildTeam() {
                     return true;
                 }
             },
+            {
+                type: "prompt",
+                name: "managerPhone",
+                message: "Please enter the Manager's phone number.",
+                validate: answer => {
+                    //regex number validation
+                    if (answer.match(/^[1-9]\d*$/)) {
+                        return true;
+                    }
+                    return "Entry must be a numeric entry."
+                }
+            },
         ])
-            .then((answers) => console.log(answers));
+            .then((answers) => {
+                // console.log(answers);
+                const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerPhone)
+                theTeam.push(manager);
+                console.log(theTeam)
+                buildMember();
+            });
     };
+
     createManager();
 
+    function buildMember() {
 
+        const teamStat = [
+            {
+                type: "prompt",
+                name: "name",
+                message: "Please enter team members name.",
+                validate: answer => {
+                    if (answer === "") {
+                        return "Please enter an answer.";
+                    }
+                    return true;
+                }
+            },
+            {
+                type: "prompt",
+                name: "id",
+                message: "Please enter the team members's numeric ID.",
+                validate: answer => {
+                    //regex number validation
+                    if (answer.match(/^[1-9]\d*$/)) {
+                        return true;
+                    }
+                    return "Entry must be a numeric entry."
+                }
+            },
+            {
+                type: "prompt",
+                name: "email",
+                message: "Please enter team members email.",
+                validate: answer => {
+                    if (answer === "") {
+                        return "Please enter an answer.";
+                    }
+                    return true;
+                }
+            }
+        ];
+
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "member",
+                message: "Please select the type of team member.",
+                choices: [
+                    "Engineer",
+                    "Intern",
+                    "No more team members needed",
+                ]
+            },
+        ])
+            .then((memberType) => {
+                console.log(memberType);
+                inquirer.prompt(teamStat)
+                    .then((stat) => {
+                        console.log(memberType, stat)
+                        inquirer.prompt([
+                            {
+                                type: "confirm",
+                                name: "more",
+                                message: "Add more members?"
+                            }
+                        ]).then((answer) => {
+                            if (answer.more !== false) {
+                                buildMember();
+                            }
+                            else {
+
+                                console.log(theTeam)
+                            }
+                        })
+                    })
+            });
+    }
 
 }
 
 function renderTeam() {
 
 }
-
-// const employeeData = [
-//     {
-//         type: "prompt",
-//         name: "name",
-//         message: "Please enter the team member name."
-//     },
-//     {
-//         type: "prompt",
-//         name: "id",
-//         message: "Please enter the team member ID."
-//     },
-//     {
-//         type: "prompt",
-//         name: "email",
-//         message: "Please enter the team member email."
-//     },
-//     {
-//         type: "list",
-//         name: "member",
-//         message: "Please select the type of team member.",
-//         choices: [
-//             "Engineer",
-//             "Intern",
-//             "No more team members needed",
-//         ]
-//     },
-// ];
-
-
-// module.exports = employeeData
-
-// inquirer.prompt(employee)
-//     .then((employeeData) => {
-
-//         let newData = employeeData;
-
-//         console.log(newData);
-
-
-
-
-//         // console.log(type.member);
-//         // let memberStats
-//         // function postAnswer() {
-//         //     if (type.member === "Manager") {
-//         //         // console.log("Manager")
-//         //         // memberType = "Manager"
-//         //     };
-//         //     if (type.member === "Engineer") {
-//         //         // console.log("Engineer")
-//         //         // memberType = "Engineer"
-//         //     };
-//         //     if (type.member === "Intern") {
-//         //         // console.log("Intern")
-//         //         // memberType = "Intern"
-//         //     };
-//         // }       
-//         // postAnswer();
-//         // console.log(teamStats)
-
-
-//     });
-
 
 
 // After the user has input all employees desired, call the `render` function (required

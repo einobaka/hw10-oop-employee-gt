@@ -5,6 +5,8 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
+const Employee = require("./lib/Employee");
+
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
@@ -13,60 +15,69 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
-const employee = [
+const employeeData = [
     {
         type: "prompt",
         name: "name",
         message: "Please enter the team member name."
     },
-    {
-        type: "prompt",
-        name: "id",
-        message: "Please enter the team member ID."
-    },
-    {
-        type: "prompt",
-        name: "email",
-        message: "Please enter the team member email."
-    },
-    {
-        type: "list",
-        name: "member",
-        message: "Please select the type of team member.",
-        choices: [
-            "Manager",
-            "Engineer",
-            "Intern"
-        ]
-    },
+    // {
+    //     type: "prompt",
+    //     name: "id",
+    //     message: "Please enter the team member ID."
+    // },
+    // {
+    //     type: "prompt",
+    //     name: "email",
+    //     message: "Please enter the team member email."
+    // },
+    // {
+    //     type: "list",
+    //     name: "member",
+    //     message: "Please select the type of team member.",
+    //     choices: [
+    //         "Manager",
+    //         "Engineer",
+    //         "Intern"
+    //     ]
+    // },
 ];
 
-inquirer.prompt(employee)
-    .then((employeeData) => {
+employeeData.getName()
+
+// module.exports = employeeData
+
+// inquirer.prompt(employee)
+//     .then((employeeData) => {
+
+//         let newData = employeeData;
+        
+//         console.log(newData);
+
 
         
 
-        // console.log(type.member);
-        // let memberStats
-        // function postAnswer() {
-        //     if (type.member === "Manager") {
-        //         // console.log("Manager")
-        //         // memberType = "Manager"
-        //     };
-        //     if (type.member === "Engineer") {
-        //         // console.log("Engineer")
-        //         // memberType = "Engineer"
-        //     };
-        //     if (type.member === "Intern") {
-        //         // console.log("Intern")
-        //         // memberType = "Intern"
-        //     };
-        // }       
-        // postAnswer();
-        // console.log(teamStats)
+//         // console.log(type.member);
+//         // let memberStats
+//         // function postAnswer() {
+//         //     if (type.member === "Manager") {
+//         //         // console.log("Manager")
+//         //         // memberType = "Manager"
+//         //     };
+//         //     if (type.member === "Engineer") {
+//         //         // console.log("Engineer")
+//         //         // memberType = "Engineer"
+//         //     };
+//         //     if (type.member === "Intern") {
+//         //         // console.log("Intern")
+//         //         // memberType = "Intern"
+//         //     };
+//         // }       
+//         // postAnswer();
+//         // console.log(teamStats)
 
 
-    });
+//     });
 
 
 

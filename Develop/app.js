@@ -31,7 +31,7 @@ inquirer.prompt(
 });
 
 function buildTeam() {
-
+    // start with manager
     function createManager() {
         inquirer.prompt([
             {
@@ -82,14 +82,12 @@ function buildTeam() {
             },
         ])
             .then((answers) => {
-                // console.log(answers);
                 const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerPhone)
                 theTeam.push(manager);
                 console.log(theTeam)
                 buildMember();
             });
     };
-
     createManager();
 
     function buildMember() {
@@ -106,8 +104,8 @@ function buildTeam() {
                 ]
             },
         ])
+            // ask team member type
             .then((memberType) => {
-                // console.log(answer);
                 switch (memberType.team) {
                     case "Engineer":
                         teamEngineer();
@@ -118,26 +116,7 @@ function buildTeam() {
                     default:
                         console.log(theTeam); //insert build team
                 }
-
-                // inquirer.prompt(teamStat)
-                //     .then((stat) => {
-                //         console.log(memberType, stat)
-                //         inquirer.prompt([
-                //             {
-                //                 type: "confirm",
-                //                 name: "more",
-                //                 message: "Add more members?"
-                //             }
-                //         ]).then((answer) => {
-                //             if (answer.more !== false) {
-                //                 buildMember();
-                //             }
-                //             else {
-                //                 console.log(theTeam)
-                //             }
-                //         })
-                //     })
-
+                // build engineer
                 function teamEngineer() {
                     inquirer.prompt([
                         {
@@ -186,9 +165,64 @@ function buildTeam() {
                             }
                         }
                     ]).then((engineerData) => {
-                        // console.log(answers);
                         const engineer = new Engineer(engineerData.name, engineerData.id, engineerData.email, engineerData.github)
                         theTeam.push(engineer);
+                        console.log(theTeam)
+                        buildMember();
+                    });
+                };
+                // build intern
+                function teamIntern() {
+                    inquirer.prompt([
+                        {
+                            type: "prompt",
+                            name: "name",
+                            message: "Please enter team members name.",
+                            validate: answer => {
+                                if (answer === "") {
+                                    return "Please enter an answer.";
+                                }
+                                return true;
+                            }
+                        },
+                        {
+                            type: "prompt",
+                            name: "id",
+                            message: "Please enter the team members's numeric ID.",
+                            validate: answer => {
+                                //regex number validation
+                                if (answer.match(/^[1-9]\d*$/)) {
+                                    return true;
+                                }
+                                return "Entry must be a numeric entry."
+                            }
+                        },
+                        {
+                            type: "prompt",
+                            name: "email",
+                            message: "Please enter team members email.",
+                            validate: answer => {
+                                if (answer === "") {
+                                    return "Please enter an answer.";
+                                }
+                                return true;
+                            }
+                        },
+                        {
+                            type: "prompt",
+                            name: "github",
+                            message: "Please enter team members github.",
+                            validate: answer => {
+                                if (answer === "") {
+                                    return "Please enter an answer.";
+                                }
+                                return true;
+                            }
+                        }
+                    ]).then((internData) => {
+                        // console.log(answers);
+                        const intern = new Intern(internData.name, internData.id, internData.email, internData.school)
+                        theTeam.push(intern);
                         console.log(theTeam)
                         buildMember();
                     });

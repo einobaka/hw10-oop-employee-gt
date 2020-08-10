@@ -84,7 +84,7 @@ function buildTeam() {
             .then((answers) => {
                 const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerPhone)
                 theTeam.push(manager);
-                console.log(theTeam)
+                // console.log(theTeam)
                 buildMember();
             });
     };
@@ -114,7 +114,8 @@ function buildTeam() {
                         teamIntern();
                         break;
                     default:
-                        console.log(theTeam); //insert build team
+                        console.log(theTeam);
+                        renderTeam(); // renderteam to team.html
                 }
                 // build engineer
                 function teamEngineer() {
@@ -210,8 +211,8 @@ function buildTeam() {
                         },
                         {
                             type: "prompt",
-                            name: "github",
-                            message: "Please enter team members github.",
+                            name: "school",
+                            message: "Please enter team members school.",
                             validate: answer => {
                                 if (answer === "") {
                                     return "Please enter an answer.";
@@ -232,7 +233,10 @@ function buildTeam() {
 }
 
 function renderTeam() {
-
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR)
+    }
+    fs.writeFileSync(outputPath, render(theTeam), "utf-8");
 }
 
 

@@ -94,47 +94,10 @@ function buildTeam() {
 
     function buildMember() {
 
-        const teamStat = [
-            {
-                type: "prompt",
-                name: "name",
-                message: "Please enter team members name.",
-                validate: answer => {
-                    if (answer === "") {
-                        return "Please enter an answer.";
-                    }
-                    return true;
-                }
-            },
-            {
-                type: "prompt",
-                name: "id",
-                message: "Please enter the team members's numeric ID.",
-                validate: answer => {
-                    //regex number validation
-                    if (answer.match(/^[1-9]\d*$/)) {
-                        return true;
-                    }
-                    return "Entry must be a numeric entry."
-                }
-            },
-            {
-                type: "prompt",
-                name: "email",
-                message: "Please enter team members email.",
-                validate: answer => {
-                    if (answer === "") {
-                        return "Please enter an answer.";
-                    }
-                    return true;
-                }
-            }
-        ];
-
         inquirer.prompt([
             {
                 type: "list",
-                name: "member",
+                name: "team",
                 message: "Please select the type of team member.",
                 choices: [
                     "Engineer",
@@ -144,29 +107,94 @@ function buildTeam() {
             },
         ])
             .then((memberType) => {
-                console.log(memberType);
-                inquirer.prompt(teamStat)
-                    .then((stat) => {
-                        console.log(memberType, stat)
-                        inquirer.prompt([
-                            {
-                                type: "confirm",
-                                name: "more",
-                                message: "Add more members?"
-                            }
-                        ]).then((answer) => {
-                            if (answer.more !== false) {
-                                buildMember();
-                            }
-                            else {
+                // console.log(answer);
+                switch (memberType.team) {
+                    case "Engineer":
+                        teamEngineer();
+                        break;
+                    case "Intern":
+                        teamIntern();
+                        break;
+                    default:
+                        console.log(theTeam); //insert build team
+                }
 
-                                console.log(theTeam)
+                // inquirer.prompt(teamStat)
+                //     .then((stat) => {
+                //         console.log(memberType, stat)
+                //         inquirer.prompt([
+                //             {
+                //                 type: "confirm",
+                //                 name: "more",
+                //                 message: "Add more members?"
+                //             }
+                //         ]).then((answer) => {
+                //             if (answer.more !== false) {
+                //                 buildMember();
+                //             }
+                //             else {
+                //                 console.log(theTeam)
+                //             }
+                //         })
+                //     })
+
+                function teamEngineer() {
+                    inquirer.prompt([
+                        {
+                            type: "prompt",
+                            name: "name",
+                            message: "Please enter team members name.",
+                            validate: answer => {
+                                if (answer === "") {
+                                    return "Please enter an answer.";
+                                }
+                                return true;
                             }
-                        })
-                    })
+                        },
+                        {
+                            type: "prompt",
+                            name: "id",
+                            message: "Please enter the team members's numeric ID.",
+                            validate: answer => {
+                                //regex number validation
+                                if (answer.match(/^[1-9]\d*$/)) {
+                                    return true;
+                                }
+                                return "Entry must be a numeric entry."
+                            }
+                        },
+                        {
+                            type: "prompt",
+                            name: "email",
+                            message: "Please enter team members email.",
+                            validate: answer => {
+                                if (answer === "") {
+                                    return "Please enter an answer.";
+                                }
+                                return true;
+                            }
+                        },
+                        {
+                            type: "prompt",
+                            name: "github",
+                            message: "Please enter team members github.",
+                            validate: answer => {
+                                if (answer === "") {
+                                    return "Please enter an answer.";
+                                }
+                                return true;
+                            }
+                        }
+                    ]).then((engineerData) => {
+                        // console.log(answers);
+                        const engineer = new Engineer(engineerData.name, engineerData.id, engineerData.email, engineerData.github)
+                        theTeam.push(engineer);
+                        console.log(theTeam)
+                        buildMember();
+                    });
+                };
             });
     }
-
 }
 
 function renderTeam() {
